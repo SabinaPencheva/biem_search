@@ -1,6 +1,7 @@
 def generate_filters(data, attributes, seed=None):
     filters = []
-    for (attr_index, (name, values)) in enumerate(attributes):
+    # Discard the last attribute match
+    for (attr_index, (name, values)) in enumerate(attributes[:-1]):
         for value in values:
             filter = []
             if seed is None:
@@ -12,7 +13,7 @@ def generate_filters(data, attributes, seed=None):
                 for seed_index in seed[1]:
                     if data[seed_index][attr_index] == value:
                         filter.append(seed_index)
-                filters.append(('+'.join([seed[0], name]), filter))
+                filters.append(("{0}+{1}({2})".format(seed[0], name, value), filter))
     return filters
 
 
