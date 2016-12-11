@@ -24,7 +24,7 @@ def is_match(entry):
 def default_eval(filter, data):
     score = 0
     for index, entry in enumerate(data):
-        if (index in filter[1] and is_match(entry)) or (index not in filter[1] and not is_match(entry)):
+        if index in filter[1] and is_match(entry):
             score += 1
     # Return the ratio between correctly placed entries and the total number of entries
     return score / len(data)
