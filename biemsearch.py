@@ -42,10 +42,12 @@ seed list of indices in data that are in the subgroup
 
 def biem_search(data, attributes, search_width, search_depth, evaluator=default_eval, seed=None):
     if search_depth == 0:
-        return seed
+        return [seed]
     filters = generate_filters(data, attributes, seed)
     filters.sort(key=lambda f: evaluator(f, data), reverse=True)
     next_level = []
     for filtr in filters[:search_width]:
-        next_level.append(biem_search(data, attributes, search_width, search_depth-1, evaluator, filtr))
+        ns = biem_search(data, attributes, search_width, search_depth-1, evaluator, filtr)
+        next_level.extend(ns)
+    filters.sort(key=lambda f: evaluator(f, data), reverse=True)
     return next_level[:search_width]
