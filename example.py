@@ -3,40 +3,37 @@ from biemsearch import biem_search
 from biem.biem import biem
 from openpyxl import Workbook
 
-total_matches = 0
-
-# Weighted relative accuracy evaluator as prescribed in exercise 1a
-def wracc_evaluator(filter, data):
-    global total_matches
-    if total_matches == 0:
-        for entry in data:
-            if entry[-1] == '1':
-                total_matches += 1
-    matches_in_group = 0
-    for index in filter[1]:
-        if data[index][-1] == '1':
-            matches_in_group += 1
-    # WRAcc(S, l = 1) =
-    #       p(S and l = 1)              - (p(S)                       * P(l = 1)                 )
-    return (matches_in_group/len(data)) - ((len(filter[1])/len(data)) * (total_matches/len(data)))
+from evaluator.match_ratio import MatchRatioEvaluator
+from evaluator.wracc import WraccEvaluator
 
 
-data = arff.load(open('../SpeedDating1-filtered-nocommas-discrete.arff'))
-results = biem_search(data['data'], data['attributes'], 10, 2, evaluator=wracc_evaluator)
+def run_evaluator(evaluator, data, attributes):
+    results = biem_search(data, attributes, 10, 2, evaluator)
 
-wb = Workbook()
-ws = wb.active
-ws['A1'] = "Name"
-ws['B1'] = "WRAcc"
-ws['C1'] = "Matches"
-ws['D1'] = "Coverage"
+    wb = Workbook()
+    ws = wb.active
+    ws['A1'] = "Name"
+    ws['B1'] = evaluator.name()
+    ws['C1'] = "Matches"
+    ws['D1'] = "Coverage"
 
-for (name, matches) in results:
-    wracc = wracc_evaluator((name, matches), data['data'])
-    coverage = len(matches)/len(data['data'])
+    for (name, matches) in results:
+        wracc = evaluator.evaluate((name, matches))
+        coverage = len(matches)/len(data)
 
-    print("{0}: WRAcc {1:.2f}%, size {2:.2f}% of full data set".format(name, wracc*100, coverage*100))
-    ws.append([name, wracc, len(matches), coverage])
+        print("{0}: {1} {2:.2f}%, size {3:.2f}% of full data set".format(name, evaluator.name(), wracc*100, coverage*100))
+        ws.append([name, wracc, len(matches), coverage])
 
-wb.save("wracc.xlsx")
-biem()
+    wb.save("{0}.xlsx".format(evaluator.name()))
+    biem()
+
+dataset = arff.load(open('../SpeedDating1-filtered-nocommas-discrete.arff'))
+data = dataset['data']
+attributes = dataset['attributes']
+
+match_ratio = MatchRatioEvaluator(data, 0.1)
+wracc = WraccEvaluator(data)
+
+evaluators = [match_ratio, wracc]
+for evaluator in evaluators:
+    run_evaluator(evaluator, data, attributes)
