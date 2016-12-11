@@ -8,7 +8,7 @@ def generate_filters(data, attributes, seed=None):
                 for (entry_index, entry) in enumerate(data):
                     if entry[attr_index] == value:
                         filter.append(entry_index)
-                filters.append((name, filter))
+                filters.append(("{0}({1}".format(name, value), filter))
             else:
                 for seed_index in seed[1]:
                     if data[seed_index][attr_index] == value:
