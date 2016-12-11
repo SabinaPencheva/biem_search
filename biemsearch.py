@@ -22,12 +22,14 @@ def is_match(entry):
 
 
 def default_eval(filter, data):
+    if len(filter[1]) / len(data) < 0.01:
+        return 0
     score = 0
-    for index, entry in enumerate(data):
-        if is_match(entry) and index in filter[1]:
-                score += 1
-    # Return the ratio between correctly placed entries and the total number of entries
-    return score
+    for index in filter[1]:
+        entry = data[index]
+        if is_match(entry):
+            score += 1
+    return score/len(filter[1])
 
 
 """
