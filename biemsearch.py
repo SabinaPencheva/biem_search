@@ -49,5 +49,5 @@ def biem_search(data, attributes, search_width, search_depth, evaluator=default_
     for filtr in filters[:search_width]:
         ns = biem_search(data, attributes, search_width, search_depth-1, evaluator, filtr)
         next_level.extend(ns)
-    filters.sort(key=lambda f: evaluator(f, data), reverse=True)
+    next_level.sort(key=lambda f: evaluator(f, data), reverse=True)
     return next_level[:search_width]
