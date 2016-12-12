@@ -1,10 +1,14 @@
-import arff
+import arff # This should be liac-arff!
 from biemsearch import biem_search
 from biem.biem import biem
 from openpyxl import Workbook
 
 from evaluator.match_ratio import MatchRatioEvaluator
 from evaluator.wracc import WraccEvaluator
+
+# First check that we have the right arff library
+if arff.__author__ != 'Renato de Pontes Pereira':
+    raise ImportError('You may have imported the wrong arff parsing library, please download liac-arff')
 
 
 def run_evaluator(evaluator, data, attributes):
