@@ -12,6 +12,10 @@ if arff.__author__ != 'Renato de Pontes Pereira':
 
 
 def run_evaluator(evaluator, data, attributes):
+    total_matches = 0
+    for entry in data:
+        if entry[-1] == '1':
+            total_matches += 1
     results = biem_search(data, attributes, 10, 2, evaluator)
 
     wb = Workbook()
@@ -19,14 +23,20 @@ def run_evaluator(evaluator, data, attributes):
     ws['A1'] = "Name"
     ws['B1'] = evaluator.name()
     ws['C1'] = "Matches"
-    ws['D1'] = "Coverage"
+    ws['D1'] = "Missed matches"
+    ws['E1'] = "Size"
+    ws['F1'] = "Relative size"
 
-    for (name, matches) in results:
-        wracc = evaluator.evaluate((name, matches))
-        coverage = len(matches)/len(data)
+    for (name, subgroup) in results:
+        matches_subgroup = 0
+        for index in subgroup:
+            if data[index][-1] == '1':
+                matches_subgroup += 1
+        quality = evaluator.evaluate((name, subgroup))
+        relative_size = len(subgroup)/len(data)
 
-        print("{0}: {1} {2:.2f}%, size {3:.2f}% of full data set".format(name, evaluator.name(), wracc*100, coverage*100))
-        ws.append([name, wracc, len(matches), coverage])
+        print("{0}: {1} {2:.2f}%, size {3:.2f}% of full data set".format(name, evaluator.name(), quality*100, relative_size*100))
+        ws.append([name, quality, matches_subgroup, total_matches - matches_subgroup, len(subgroup), relative_size])
 
     wb.save("{0}.xlsx".format(evaluator.name()))
     biem()
