@@ -6,6 +6,7 @@ from openpyxl import Workbook
 from evaluator.match_ratio import MatchRatioEvaluator
 from evaluator.wracc import WraccEvaluator
 from evaluator.sensitivity import SensitivityEvaluator
+from evaluator.specificity import SpecificityEvaluator
 
 # First check that we have the right arff library
 if arff.__author__ != 'Renato de Pontes Pereira':
@@ -49,7 +50,8 @@ attributes = dataset['attributes']
 match_ratio = MatchRatioEvaluator(data, 0.1)
 wracc = WraccEvaluator(data)
 sensitivity = SensitivityEvaluator(data, 0.1)
+specificity = SpecificityEvaluator(data)
 
-evaluators = [match_ratio, wracc, sensitivity]
+evaluators = [match_ratio, wracc, sensitivity, specificity]
 for evaluator in evaluators:
     run_evaluator(evaluator, data, attributes)
