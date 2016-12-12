@@ -2,6 +2,8 @@ def generate_filters(data, attributes, seed=None):
     filters = []
     # Discard the last attribute match
     for (attr_index, (name, values)) in enumerate(attributes[:-1]):
+        if values == 'NUMERIC':
+            continue
         for value in values:
             filter = []
             if seed is None:
