@@ -1,11 +1,12 @@
 from .base import AbstractEvaluator
 
 
-class Sensitivity(AbstractEvaluator):
+class SensitivityEvaluator(AbstractEvaluator):
     def name(self):
         return "Sensitivity"
 
     def __init__(self, data, cutoff):
+        super().__init__(data)
         self.total_matches = 0
         self.cutoff = cutoff
         for entry in data:
