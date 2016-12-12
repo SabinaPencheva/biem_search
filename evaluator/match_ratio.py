@@ -1,4 +1,4 @@
-from evaluator.base import AbstractEvaluator
+from .base import AbstractEvaluator
 
 
 class MatchRatioEvaluator(AbstractEvaluator):
