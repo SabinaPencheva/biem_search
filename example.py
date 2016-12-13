@@ -18,7 +18,7 @@ def run_evaluator(evaluator, data, attributes):
     for entry in data:
         if entry[-1] == '1':
             total_matches += 1
-    results = biem_search(data, attributes, 10, 2, evaluator)
+    results = biem_search(data, attributes, 100, 2, evaluator)
 
     wb = Workbook()
     ws = wb.active
@@ -29,13 +29,18 @@ def run_evaluator(evaluator, data, attributes):
     ws['E1'] = "Size"
     ws['F1'] = "Relative size"
 
-    for (name, subgroup) in results:
+    for (attributes, attr_values, subgroup) in results:
         matches_subgroup = 0
         for index in subgroup:
             if data[index][-1] == '1':
                 matches_subgroup += 1
-        quality = evaluator.evaluate((name, subgroup))
+        quality = evaluator.evaluate((attributes, attr_values, subgroup))
         relative_size = len(subgroup)/len(data)
+
+        names = []
+        for (name, value) in zip(attributes, attr_values):
+            names.append("{0}({1})".format(name, value))
+        name = "+".join(names)
 
         print("{0}: {1} {2:.2f}%, size {3:.2f}% of full data set".format(name, evaluator.name(), quality*100, relative_size*100))
         ws.append([name, quality, matches_subgroup, total_matches - matches_subgroup, len(subgroup), relative_size])
@@ -52,6 +57,6 @@ wracc = WraccEvaluator(data)
 sensitivity = SensitivityEvaluator(data, 0.1)
 specificity = SpecificityEvaluator(data)
 
-evaluators = [match_ratio, wracc, sensitivity, specificity]
+evaluators = [specificity]
 for evaluator in evaluators:
     run_evaluator(evaluator, data, attributes)

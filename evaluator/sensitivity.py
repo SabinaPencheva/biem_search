@@ -15,7 +15,7 @@ class SensitivityEvaluator(AbstractEvaluator):
 
     def evaluate(self, subgroup):
         matches_in_group = 0
-        for index in subgroup[1]:
+        for index in subgroup[2]:
             if self.is_match(index):
                 matches_in_group += 1
         #Sensitivity quality evaluator: p/P
