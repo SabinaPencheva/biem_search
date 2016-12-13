@@ -13,7 +13,7 @@ class MatchRatioEvaluator(AbstractEvaluator):
         if len(subgroup[2]) / len(self.data) < self.cutoff:
             return 0
         score = 0
-        for index in subgroup[1]:
+        for index in subgroup[2]:
             if self.is_match(index):
                 score += 1
         return score / len(subgroup[2])
