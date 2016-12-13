@@ -18,7 +18,7 @@ def run_evaluator(evaluator, data, attributes):
     for entry in data:
         if entry[-1] == '1':
             total_matches += 1
-    results = biem_search(data, attributes, 100, 2, evaluator)
+    results = biem_search(data, attributes, 10, 2, evaluator)
 
     wb = Workbook()
     ws = wb.active
@@ -55,7 +55,7 @@ attributes = dataset['attributes']
 match_ratio = MatchRatioEvaluator(data, 0.1)
 wracc = WraccEvaluator(data)
 sensitivity = SensitivityEvaluator(data, 0.1)
-specificity = SpecificityEvaluator(data)
+specificity = SpecificityEvaluator(data, 0.1)
 
 evaluators = [specificity]
 for evaluator in evaluators:

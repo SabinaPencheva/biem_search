@@ -6,8 +6,9 @@ class SpecificityEvaluator(AbstractEvaluator):
     def name(self):
         return "Specificity"
 
-    def __init__(self, data):
+    def __init__(self, data, cutoff):
         super().__init__(data)
+        self.cutoff = cutoff
         self.total_non_matches = 0
         for entry in data:
             if entry[-1] == '0':
