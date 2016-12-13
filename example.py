@@ -57,6 +57,6 @@ wracc = WraccEvaluator(data)
 sensitivity = SensitivityEvaluator(data, 0.1)
 specificity = SpecificityEvaluator(data, 0.1)
 
-evaluators = [specificity]
+evaluators = [match_ratio, wracc, sensitivity, specificity]
 for evaluator in evaluators:
     run_evaluator(evaluator, data, attributes)
