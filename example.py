@@ -48,7 +48,7 @@ def run_evaluator(evaluator, data, attributes):
     wb.save("{0}.xlsx".format(evaluator.name()))
     biem()
 
-dataset = arff.load(open('../SpeedDating1-filtered-nocommas-discrete.arff'))
+dataset = arff.load(open('../SpeedDating1-filtered-nocommas-discrete-withouthasnull.arff'))
 data = dataset['data']
 attributes = dataset['attributes']
 
