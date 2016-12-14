@@ -7,6 +7,7 @@ from evaluator.match_ratio import MatchRatioEvaluator
 from evaluator.wracc import WraccEvaluator
 from evaluator.sensitivity import SensitivityEvaluator
 from evaluator.specificity import SpecificityEvaluator
+from evaluator.chisquared import ChisquaredEvaluator
 
 # First check that we have the right arff library
 if arff.__author__ != 'Renato de Pontes Pereira':
@@ -48,7 +49,7 @@ def run_evaluator(evaluator, data, attributes):
     wb.save("{0}.xlsx".format(evaluator.name()))
     biem()
 
-dataset = arff.load(open('../SpeedDating1-filtered-nocommas-discrete-withouthasnull.arff'))
+dataset = arff.load(open('./SpeedDating1-filtered-nocommas-discrete-withouthasnull.arff'))
 data = dataset['data']
 attributes = dataset['attributes']
 
@@ -56,7 +57,8 @@ match_ratio = MatchRatioEvaluator(data, 0.1)
 wracc = WraccEvaluator(data)
 sensitivity = SensitivityEvaluator(data, 0.1)
 specificity = SpecificityEvaluator(data, 0.1)
+chisquared = ChisquaredEvaluator(data, 0.1);
 
-evaluators = [match_ratio, wracc, sensitivity, specificity]
+evaluators = [match_ratio, wracc, sensitivity, specificity, chisquared]
 for evaluator in evaluators:
     run_evaluator(evaluator, data, attributes)

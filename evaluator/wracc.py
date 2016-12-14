@@ -26,4 +26,5 @@ class WraccEvaluator(AbstractEvaluator):
         # WRAcc(S, l = 1) =
         #       p(S and l = 1)               - (p(S)                        * P(l = 1)                       )
         len_data = len(self.data)
+        #return (matches_in_group / len_data) - ((len(subgroup[1]) / len_data) * (self.total_matches / len_data))
         return (matches_in_group/self.total_matches) - (nonmatches_in_group / self.total_nonmatches)
