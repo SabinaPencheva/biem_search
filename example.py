@@ -1,4 +1,5 @@
 import arff # This should be liac-arff!
+import pickle
 from biemsearch import biem_search
 from biem.biem import biem
 from openpyxl import Workbook
@@ -7,6 +8,8 @@ from evaluator.match_ratio import MatchRatioEvaluator
 from evaluator.wracc import WraccEvaluator
 from evaluator.sensitivity import SensitivityEvaluator
 from evaluator.specificity import SpecificityEvaluator
+
+from loader.loader import parseCSV
 
 # First check that we have the right arff library
 if arff.__author__ != 'Renato de Pontes Pereira':
@@ -18,7 +21,7 @@ def run_evaluator(evaluator, data, attributes):
     for entry in data:
         if entry[-1] == '1':
             total_matches += 1
-    results = biem_search(data, attributes, 10, 2, evaluator)
+    results = biem_search(data, attributes, 5, 1, evaluator)
 
     wb = Workbook()
     ws = wb.active
@@ -47,16 +50,31 @@ def run_evaluator(evaluator, data, attributes):
 
     wb.save("{0}.xlsx".format(evaluator.name()))
     biem()
+# Old dataset (SpeedDating)
+# dataset = arff.load(open('../SpeedDating1-filtered-nocommas-discrete.arff'))
+# data = dataset['data']
+# attributes = dataset['attributes']
+#
+# New dataset (Fresh read from csv)
+# data, attributes = parseCSV('../joined.csv')
+# pickle.dump((data,attributes), open('../joined.pickled', 'wb'))
+#
+# New dataset (Cached from pickle)
+data, attributes = pickle.load(open('../joined.pickled', 'rb'))
 
-dataset = arff.load(open('../SpeedDating1-filtered-nocommas-discrete.arff'))
-data = dataset['data']
-attributes = dataset['attributes']
+data = data[:1000]
+attributes = list(filter(lambda x: len(x[1]) < 300, attributes))
+
+for attr in attributes:
+    print("{0} has {1} different values".format(attr[0], len(attr[1])))
+
+print(data[0])
 
 match_ratio = MatchRatioEvaluator(data, 0.1)
 wracc = WraccEvaluator(data)
 sensitivity = SensitivityEvaluator(data, 0.1)
 specificity = SpecificityEvaluator(data, 0.1)
 
-evaluators = [match_ratio, wracc, sensitivity, specificity]
+evaluators = [match_ratio]
 for evaluator in evaluators:
     run_evaluator(evaluator, data, attributes)
