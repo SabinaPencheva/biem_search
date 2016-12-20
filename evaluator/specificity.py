@@ -15,7 +15,7 @@ class SpecificityEvaluator(AbstractEvaluator):
                 self.total_non_matches += 1
 
     def evaluate(self, subgroup):
-        if len(subgroup[2]) / len(self.data) < 0.1:
+        if len(subgroup[2]) / len(self.data) < self.cutoff:
             return 0
         non_matches_in_group = 0
         for index in subgroup[2]:

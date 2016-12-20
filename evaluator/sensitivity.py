@@ -14,6 +14,8 @@ class SensitivityEvaluator(AbstractEvaluator):
                 self.total_matches += 1
 
     def evaluate(self, subgroup):
+        if len(subgroup[2]) / len(self.data) < self.cutoff:
+            return 0
         matches_in_group = 0
         for index in subgroup[2]:
             if self.is_match(index):

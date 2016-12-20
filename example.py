@@ -8,6 +8,7 @@ from evaluator.match_ratio import MatchRatioEvaluator
 from evaluator.wracc import WraccEvaluator
 from evaluator.sensitivity import SensitivityEvaluator
 from evaluator.specificity import SpecificityEvaluator
+from evaluator.chisquared import ChisquaredEvaluator
 
 from loader.loader import parseCSV
 
@@ -68,12 +69,7 @@ attributes = list(filter(lambda x: len(x[1]) < 300, attributes))
 for attr in attributes:
     print("{0} has {1} different values".format(attr[0], len(attr[1])))
 
-print(data[0])
-
 match_ratio = MatchRatioEvaluator(data, 0.1)
-wracc = WraccEvaluator(data)
-sensitivity = SensitivityEvaluator(data, 0.1)
-specificity = SpecificityEvaluator(data, 0.1)
 
 evaluators = [match_ratio]
 for evaluator in evaluators:
