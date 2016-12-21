@@ -11,7 +11,7 @@ class SpecificityEvaluator(AbstractEvaluator):
         self.cutoff = cutoff
         self.total_non_matches = 0
         for entry in data:
-            if entry[-1] == '0':
+            if entry[-1] == 'view':
                 self.total_non_matches += 1
 
     def evaluate(self, subgroup):

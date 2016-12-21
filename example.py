@@ -64,14 +64,29 @@ def run_evaluator(evaluator, data, attributes):
 # data, attributes = pickle.load(open('../joined.pickled', 'rb'))
 
 data,attributes = parseCSV("dataset.csv")
-attributes = list(filter(lambda x: len(x[1]) < 300, attributes))
-
-for attr in attributes:
-    print("{0} has {1} different values".format(attr[0], len(attr[1])))
+# attributes = list(filter(lambda x: len(x[1]) < 300, attributes))
 
 wracc = WraccEvaluator(data)
 match = MatchRatioEvaluator(data, 0.1)
+sens = SensitivityEvaluator(data, 0.01)
+spec = SpecificityEvaluator(data, 0.01)
+chi = ChisquaredEvaluator(data, 0.01)
 
-evaluators = [wracc, match]
+evaluators = [wracc, match, sens, spec, chi]
 for evaluator in evaluators:
     run_evaluator(evaluator, data, attributes)
+
+def test_data():
+    cond_index = 0
+    cond_values = []
+    for index, attr in enumerate(attributes):
+        if attr[0] == "condition":
+            cond_index = index
+            print("Condition index: ", index)
+            cond_values = attr[1]
+    for row in data:
+        if row[-1] == "clic":
+            print("Clic with condition: ", row[cond_index])
+
+
+#test_data()

@@ -11,9 +11,9 @@ class ChisquaredEvaluator(AbstractEvaluator):
         self.total_nonmatches = 0
         self.cutoff = cutoff
         for entry in data:
-            if entry[-1] == '1':
+            if entry[-1] == 'clic':
                 self.total_matches += 1
-            elif entry[-1] == '0':
+            elif entry[-1] == 'view':
                 self.total_nonmatches += 1
 
     def evaluate(self, subgroup):
