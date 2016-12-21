@@ -13,7 +13,7 @@ class ChisquaredEvaluator(AbstractEvaluator):
         for entry in data:
             if entry[-1] == 'clic':
                 self.total_matches += 1
-            elif entry[-1] == 'view':
+            else:
                 self.total_nonmatches += 1
 
     def evaluate(self, subgroup):

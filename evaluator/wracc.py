@@ -16,6 +16,8 @@ class WraccEvaluator(AbstractEvaluator):
                 self.total_nonmatches += 1
 
     def evaluate(self, subgroup):
+        if len(subgroup[2]) == 0:
+            return 0
         matches_in_group = 0
         nonmatches_in_group = 0
         for index in subgroup[2]:
@@ -23,8 +25,9 @@ class WraccEvaluator(AbstractEvaluator):
                 matches_in_group += 1
             else:
                 nonmatches_in_group += 1
-        # WRAcc(S, l = 1) =
-        #       p(S and l = 1)               - (p(S)                        * P(l = 1)                       )
-        len_data = len(self.data)
-        #return (matches_in_group / len_data) - ((len(subgroup[1]) / len_data) * (self.total_matches / len_data))
-        return (matches_in_group/self.total_matches) - (nonmatches_in_group / self.total_nonmatches)
+        p = matches_in_group
+        n = nonmatches_in_group
+        P = self.total_matches
+        N = self.total_nonmatches
+        # hwra' =
+        return ((p+n)/(P+N)) * ((p / (p+n)) - (P / (P+N)))
