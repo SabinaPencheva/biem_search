@@ -22,7 +22,7 @@ def run_evaluator(evaluator, data, attributes):
     for entry in data:
         if entry[-1] == '1':
             total_matches += 1
-    results = biem_search(data, attributes, 5, 1, evaluator)
+    results = biem_search(data, attributes, 10, 2, evaluator)
 
     wb = Workbook()
     ws = wb.active
@@ -61,7 +61,9 @@ def run_evaluator(evaluator, data, attributes):
 # pickle.dump((data,attributes), open('../joined.pickled', 'wb'))
 #
 # New dataset (Cached from pickle)
-data, attributes = pickle.load(open('../joined.pickled', 'rb'))
+# data, attributes = pickle.load(open('../joined.pickled', 'rb'))
+
+data,attributes = parseCSV("dataset.csv")
 
 data = data[:1000]
 attributes = list(filter(lambda x: len(x[1]) < 300, attributes))
@@ -69,8 +71,8 @@ attributes = list(filter(lambda x: len(x[1]) < 300, attributes))
 for attr in attributes:
     print("{0} has {1} different values".format(attr[0], len(attr[1])))
 
-match_ratio = MatchRatioEvaluator(data, 0.1)
+wracc = WraccEvaluator(data)
 
-evaluators = [match_ratio]
+evaluators = [wracc]
 for evaluator in evaluators:
     run_evaluator(evaluator, data, attributes)

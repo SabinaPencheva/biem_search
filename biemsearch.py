@@ -5,6 +5,8 @@ def generate_filters(data, attributes, seed=None):
         if values == 'NUMERIC':
             continue
         for value in values:
+            if value is None:
+                continue
             filter = []
             if seed is None:
                 for (entry_index, entry) in enumerate(data):

@@ -3,10 +3,11 @@ import csv
 
 def parseCSV(path):
     file = open(path)
-    reader = csv.reader(file, delimiter=';')
+    reader = csv.reader(file)
     data = []
     attributes = []
     for index, row in enumerate(reader):
+        row = list(map(lambda x: None if x == '' else x, row))
         if index == 0:
             for col in row:
                 attributes.append((col, set()))

@@ -14,4 +14,4 @@ class AbstractEvaluator(ABC):
         raise NotImplemented()
 
     def is_match(self, index):
-        return self.data[index][-1] == '1'
+        return self.data[index][-1] == 'clic'
