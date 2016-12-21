@@ -10,9 +10,9 @@ class WraccEvaluator(AbstractEvaluator):
         self.total_matches = 0
         self.total_nonmatches = 0
         for entry in data:
-            if entry[-1] == '1':
+            if entry[-1] == "clic":
                 self.total_matches += 1
-            elif entry[-1] == '0':
+            else:
                 self.total_nonmatches += 1
 
     def evaluate(self, subgroup):
@@ -26,5 +26,5 @@ class WraccEvaluator(AbstractEvaluator):
         # WRAcc(S, l = 1) =
         #       p(S and l = 1)               - (p(S)                        * P(l = 1)                       )
         len_data = len(self.data)
-        return (matches_in_group / len_data) - ((len(subgroup[1]) / len_data) * (self.total_matches / len_data))
-        #return (matches_in_group/self.total_matches) - (nonmatches_in_group / self.total_nonmatches)
+        #return (matches_in_group / len_data) - ((len(subgroup[1]) / len_data) * (self.total_matches / len_data))
+        return (matches_in_group/self.total_matches) - (nonmatches_in_group / self.total_nonmatches)

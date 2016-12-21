@@ -20,7 +20,7 @@ if arff.__author__ != 'Renato de Pontes Pereira':
 def run_evaluator(evaluator, data, attributes):
     total_matches = 0
     for entry in data:
-        if entry[-1] == '1':
+        if entry[-1] == 'clic':
             total_matches += 1
     results = biem_search(data, attributes, 10, 2, evaluator)
 
@@ -36,7 +36,7 @@ def run_evaluator(evaluator, data, attributes):
     for (attributes, attr_values, subgroup) in results:
         matches_subgroup = 0
         for index in subgroup:
-            if data[index][-1] == '1':
+            if data[index][-1] == 'clic':
                 matches_subgroup += 1
         quality = evaluator.evaluate((attributes, attr_values, subgroup))
         relative_size = len(subgroup)/len(data)
@@ -64,15 +64,14 @@ def run_evaluator(evaluator, data, attributes):
 # data, attributes = pickle.load(open('../joined.pickled', 'rb'))
 
 data,attributes = parseCSV("dataset.csv")
-
-data = data[:1000]
 attributes = list(filter(lambda x: len(x[1]) < 300, attributes))
 
 for attr in attributes:
     print("{0} has {1} different values".format(attr[0], len(attr[1])))
 
 wracc = WraccEvaluator(data)
+match = MatchRatioEvaluator(data, 0.1)
 
-evaluators = [wracc]
+evaluators = [wracc, match]
 for evaluator in evaluators:
     run_evaluator(evaluator, data, attributes)
